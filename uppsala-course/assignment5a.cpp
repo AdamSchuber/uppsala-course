@@ -66,16 +66,19 @@ Text::Text() {
     }
 }
 
+Text::~Text() {}
+
 void Text::setText(string const& nyText) {
     content = nyText;
 }
 
 bool Text::beraknaHistogramAbs() {
     num_of_letters = 0;
-    int ascii, tmp;
+    int tmp;
 
-    for (char const& c : content) {
-        ascii = c;
+    // kollar varje karaktär om det matchar en bokstav
+    // från ASCII tabellen, både stora och små
+    for (char ascii : content) {
         tmp = ascii;
         tmp -= 97;
         if (tmp < 0) {
@@ -84,8 +87,11 @@ bool Text::beraknaHistogramAbs() {
         else {
             ascii = tmp;
         }
-        histogram[ascii]++;
-        num_of_letters++;
+
+        if (0 <= ascii && ascii < ANTAL_BOKSTAVER) {
+            histogram[(int)ascii]++;
+            num_of_letters++;
+        }
     }
 
     if (num_of_letters > 0) {

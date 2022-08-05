@@ -66,8 +66,7 @@ int main() {
         num_of_letters = berakna_histogram_abs(content, histogram);
 
         if (num_of_letters == 0) {
-            cout << "\nDet finns inget att beräkna. " << read 
-                << " är tom!" << endl;
+            cout << "\nDet finns inget att beräkna. " << read << " är tom!" << endl;
         }   
         else {
             abs_till_rel(num_of_letters, relative, histogram);
@@ -81,12 +80,12 @@ int main() {
 //--------------------------------------------------------
 
 int berakna_histogram_abs(string const &content, int histogram[]) {
-    int num_of_letters = 0, ascii, tmp;
+    int num_of_letters = 0, tmp;
+
 
     // kollar varje karaktär om det matchar en bokstav
     // från ASCII tabellen, både stora och små
-    for (char const& c : content) {
-        ascii = c;
+    for (char ascii : content) {
         tmp = ascii;
         tmp -= 97;
         if (tmp < 0) {
@@ -96,8 +95,8 @@ int berakna_histogram_abs(string const &content, int histogram[]) {
             ascii = tmp;
         }
 
-        if (0 <= ascii || ascii <= ANTAL_BOKSTAVER) {
-            histogram[ascii]++;
+        if (0 <= ascii && ascii < ANTAL_BOKSTAVER) {
+            histogram[(int)ascii]++;
             num_of_letters++;
         }
     }
@@ -128,7 +127,7 @@ void plotta_histogram_rel(int const& num_of_letters, double relative[]) {
     cout << " \nTotala antalet bokstäver: " << num_of_letters << endl;
     cout << "Bokstavsfördelning:\n" << endl;
 
-    // Printar histogramet som sjärnor
+    // Printar histogrammet som sjärnor
     for (int i = 0; i < ANTAL_BOKSTAVER; i++) {
         num_of_stars = relative[i] * 2.0;
         stars = "";

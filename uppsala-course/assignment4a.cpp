@@ -38,8 +38,7 @@ int berakna_histogram_abs(string const &content, int histogram[]) {
 
     // kollar varje karaktär om det matchar en bokstav
     // från ASCII tabellen, både stora och små
-    for (char const& c : content) {
-        ascii = c;
+    for (char ascii : content) {
         tmp = ascii;
         tmp -= 97;
         if (tmp < 0) {
@@ -48,12 +47,12 @@ int berakna_histogram_abs(string const &content, int histogram[]) {
         else {
             ascii = tmp;
         }
-        if (0 <= ascii || ascii <= 26) {
-            histogram[ascii]++;
+
+        if (0 <= ascii && ascii < ANTAL_BOKSTAVER) {
+            histogram[(int)ascii]++;
             num_of_letters++;
         }
     }
-    
     return num_of_letters;
 }
 
