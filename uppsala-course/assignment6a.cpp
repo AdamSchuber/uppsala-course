@@ -5,8 +5,8 @@ using namespace std;
 
 // klass och funktions deklarationer
 
-const int MAX_PERSONER = 100;
-const int MAX_TRANSAKTIONER  = 100;
+const int MAX_PERSONER = 10;
+const int MAX_TRANSAKTIONER  = 30;
 
 class Transaktion {
 public:
@@ -181,7 +181,6 @@ int Transaktion::hamtaAntalKompisar() {
 }
 
 bool Transaktion::finnsKompis(string const& namnet) {
-    // kollar om kompis finns
     for (int i = 0; i < antal_kompisar; i++) {
         if (kompisar[i] == namnet) {
             return true;
@@ -264,7 +263,7 @@ void Person::skrivUt(ostream& os) {
     os << ". Skall lägga " << abs(sum) << " till potten!" << endl;
   }
   else {
-    os << ". Skall ha " << sum << " från potten!" << endl;
+    os << ". Skall ha " << abs(sum) << " från potten!" << endl;
   }
 }
 
@@ -308,8 +307,7 @@ double PersonLista::summaBetalt() {
 }
 
 bool PersonLista::finnsPerson(string const& namn) {
-  // kollar om parameter namnet matchar ett namn
-  // i personlistan
+  // kollar om parameter namnet matchar ett namn i personlistan
 	for (int i = 0; i < antal_personer; i++) {
 		if (personer[i].hamtaNamn() == namn) {
 			return true;
@@ -397,26 +395,24 @@ double TransaktionsLista::arSkyldig(string const& namnet) {
 	double sum = 0.0;
 	for (int i = 0; i < antal_transaktioner; i++) {
 		if (transaktioner[i].finnsKompis(namnet)) {
-			sum += transaktioner[i].HamtaBelopp() *
-				(1.0 - 1.0 / (transaktioner[i].hamtaAntalKompisar() + 1));
+			sum += (transaktioner[i].HamtaBelopp() / (transaktioner[i].hamtaAntalKompisar() + 1));
 		}
 	}
 	return sum;
 }
 
 PersonLista TransaktionsLista::fixaPersoner() {
-  // skapar en PersonLista från alla transaktioner
-  // där personens namn, betalningar och skyldigheter länkas 
-  // till personen
+  // skapar en PersonLista från alla transaktioner där
+  // personens namn, betalningar och skyldigheter länkas till personen
 	PersonLista list;
 	string curr_name;
     for (int i = 0; i < antal_transaktioner; i++) {
-		curr_name = transaktioner[i].hamtaNamn();
-		if (!list.finnsPerson(curr_name)) {
-			Person p(curr_name, 
-                liggerUteMed(curr_name), arSkyldig(curr_name));
-			list.laggTill(p);
-		}
-	}
+		  curr_name = transaktioner[i].hamtaNamn();
+		  if (!list.finnsPerson(curr_name)) {
+			  Person p(curr_name, 
+                  liggerUteMed(curr_name), arSkyldig(curr_name));
+        list.laggTill(p);
+		  }
+    }
 	return list;
 }
