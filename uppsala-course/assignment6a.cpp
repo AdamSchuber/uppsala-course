@@ -77,11 +77,8 @@ int main()
   cout << "Startar med att läsa från en fil." << endl;
 
   TransaktionsLista transaktioner;
-  std::ifstream is("resa.txt");
+  std::ifstream is("resa1.txt");
   transaktioner.lasIn(is);
-
-  //temp  
-  cout << "läst in resa" << endl;
 
   int operation = 1;
   while (operation != 0)
@@ -157,7 +154,6 @@ int main()
 
   ofstream os("transaktioner.txt");
   transaktioner.skrivUt(os);
-
   return 0;
 }
 
@@ -321,13 +317,7 @@ bool PersonLista::finnsPerson(string const& namn) {
 TransaktionsLista::TransaktionsLista()
 	: antal_transaktioner{0} {}
 
-TransaktionsLista::~TransaktionsLista() {
-  // destruktor för att ta bort de dynamiskt allokerade
-  // transaktionerna
-  for (int i = 0; i < antal_transaktioner; i++) {
-    delete &transaktioner[i];
-  }
-}
+TransaktionsLista::~TransaktionsLista() {}
 
 void TransaktionsLista::lasIn(istream& is) {
   // kollar om istream är öppen och tillgänglig
@@ -336,17 +326,17 @@ void TransaktionsLista::lasIn(istream& is) {
   }
 
   // loopar och läser in nya transaktioner tills
-  // istream is inte har något mer att läsa
+  // istream inte har något mer att läsa
 	while (true) {
     // dynamiskt allokerar nya transaktions objekt
-		Transaktion *t = new Transaktion;
-		if (!t->lasIn(is)) {
-      delete t;
+    Transaktion t;
+		if (!t.lasIn(is)) {
+      // delete t;
 			break;
 		}
 		else {
       // lägger till transaktionen i listan
-			laggTill(*t);
+			laggTill(t);
 		}
 	}
 }
@@ -354,10 +344,12 @@ void TransaktionsLista::lasIn(istream& is) {
 void TransaktionsLista::skrivUt(ostream& os) {
   // skriver ut alla transaktioners information på
   // ett snyggt sätt
-	os << "Antal trans = " << antal_transaktioner << endl;
-  transaktioner[0].skrivTitel(os);
-	for (int i = 0; i < antal_transaktioner; i++) {
-		transaktioner[i].skrivUt(os);
+	if (antal_transaktioner > 0) {
+    os << "Antal trans = " << antal_transaktioner << endl;
+    transaktioner[0].skrivTitel(os);
+    for (int i = 0; i < antal_transaktioner; i++) {
+      transaktioner[i].skrivUt(os);
+    }
 	}
 }
 
